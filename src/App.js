@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 import {Route, Routes } from 'react-router-dom';
 import ProductList from './components/ProductList';
 import Cart from './components/Cart';
-import Checkout from './components/Checkout';
+
+import Navbar from './components/Navbar';
 
 function App() {
   const [cartItems, setCartItems] = useState([]);
@@ -24,10 +25,11 @@ function App() {
   return (
    
     <div className="App">
+      <Navbar/>
       <Routes>
         <Route path="/" element={<ProductList category="all" onAddToCart={addToCart} />} />
         <Route path="/cart" element={<Cart cartItems={cartItems} onRemoveFromCart={removeFromCart} />} />
-        <Route path="/checkout" element={<Checkout cartItems={cartItems} subtotal={subtotal} discount={discount} total={total} />} />
+        {/* <Route path="/checkout" element={<Checkout cartItems={cartItems} subtotal={subtotal} discount={discount} total={total} />} /> */}
       </Routes>
     </div>
   
