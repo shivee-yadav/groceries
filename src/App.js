@@ -1,14 +1,15 @@
 import './App.css';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { fetchProducts } from './components/API';
 import {Route, Routes } from 'react-router-dom';
 import ProductList from './components/ProductList';
 import Cart from './components/Cart';
-
 import Navbar from './components/Navbar';
 
 function App() {
+  const [category, setCategory] = useState('all');
   const [cartItems, setCartItems] = useState([]);
-
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const addToCart = (product) => {
     setCartItems([...cartItems, product]);
   };
@@ -18,18 +19,33 @@ function App() {
     setCartItems(updatedCart);
   };
 
-  const subtotal = cartItems.reduce((acc, item) => acc + item.price, 0);
-  const discount = 0; // Implement discount logic here
-  const total = subtotal - discount;
+ 
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await fetchProducts(category);
+      setFilteredProducts(data);
+    };
+
+    fetchData();
+  }, [category]);
+
+  const handleSearch = (searchQuery) => {
+    // Filter products based on the search query
+    const filtered = filteredProducts.filter((product) =>
+      product.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    setFilteredProducts(filtered);
+  };
 
   return (
    
-    <div className="App">
-      <Navbar/>
+    <div className="bg-offwhite">
+      <Navbar onSearch={handleSearch}/>
       <Routes>
         <Route path="/" element={<ProductList category="all" onAddToCart={addToCart} />} />
         <Route path="/cart" element={<Cart cartItems={cartItems} onRemoveFromCart={removeFromCart} />} />
-        {/* <Route path="/checkout" element={<Checkout cartItems={cartItems} subtotal={subtotal} discount={discount} total={total} />} /> */}
       </Routes>
     </div>
   
