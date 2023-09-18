@@ -7,8 +7,7 @@ export const CartItem = ({ product }) => {
     useContext(ShopContext);
     const quantity = cartItems[product.id];
     const totalItemPrice = Number(product.price.substring(1)) * quantity;
-    console.log(quantity);
-    console.log(totalItemPrice);
+   
 
 
   return (
