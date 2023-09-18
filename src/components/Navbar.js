@@ -12,18 +12,21 @@ const Navbar = () => {
   
   return (
     <>
-    <div className="h-12 p-4 ">
-      <div className="flex flex-nowrap justify-between">
-        <Link to="/" className="font-semibold text-lg"> Groceries </Link>
-       <Searchbar  setResults={setResults} />
-        <Link to="/cart">
+   <nav class="flex justify-between px-8 py-4 items-center bg-white sm:justify-between sm:m-0 p-0">
+   <Link to="/" class="text-xl text-gray-800 font-bold flex justify-start"> Groceries </Link>
+       
+        <div class="flex items-center">
+       <Searchbar  setResults={setResults}  class="ml-2 outline-none bg-transparent font-"/>
+     </div>
+    
+        <Link to="/cart" className="flex justify-end">
           <ShoppingCart size={32} />
         </Link>
-      </div>
-    </div>
-    <div>
+   </nav>
+    <div className="">
       <SearchResults results={results} />
     </div>
+    
     </>
   );
 };

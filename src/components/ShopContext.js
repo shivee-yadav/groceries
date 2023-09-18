@@ -5,6 +5,8 @@ export const ShopContext = createContext(null);
 export const ShopContextProvider = (props) => {
   const [cartItems, setCartItems] = useState({});
   const [products, setProducts] = useState([]);
+  const [appliedOffers, setAppliedOffers] = useState([]);
+  const [discount, setDiscount] = useState(0);
 
   useEffect(() => {
     // Fetch product data from the API
@@ -26,8 +28,41 @@ export const ShopContextProvider = (props) => {
     setCartItems(getDefaultCart());
   }, [products]);
 
+  const applyOffers = () => {
+    let totalDiscount = 0;
+    let offersApplied = [];
+
+    // Iterate through cart items to check for offers
+    for (const itemId in cartItems) {
+      const itemInfo = products.find((product) => product.id === Number(itemId));
+      const itemQuantity = cartItems[itemId];
+      const itemPrice = parseFloat(itemInfo.price.substring(1));
+
+      // Check for offers and apply discounts
+      if (itemInfo.name === 'Coca-Cola' && itemQuantity >= 6) {
+        const freeCokes = Math.floor(itemQuantity / 6);
+        const cokeDiscount = freeCokes * itemPrice;
+        totalDiscount += cokeDiscount;
+        offersApplied.push(`Buy 6 cans of Coca-Cola, get ${freeCokes} free`);
+      }
+
+      if (itemInfo.name === "Croissants" && itemQuantity >= 3) {
+        const freeCoffees = Math.floor(itemQuantity / 3);
+        const coffeePrice = products.find((product) => product.name === "Coffee").price.substring(1);
+        const crossDiscount = freeCoffees * coffeePrice;
+        totalDiscount += crossDiscount;
+        offersApplied.push(`Buy 3 Croissants, get ${freeCoffees} free`);
+      }
+    }
+
+    setAppliedOffers(offersApplied);
+    setDiscount(totalDiscount);
+  };
+
+
   const getTotalCartAmount = () => {
     let totalAmount = 0;
+    
   
     // Loop through each product in cartItems
     for (const item in cartItems) {
@@ -37,10 +72,18 @@ export const ShopContextProvider = (props) => {
         console.log(itemInfo.price.substring(1))
         // Calculate the total for this product and add it to the totalAmount
         totalAmount += cartItems[item] * Number(itemInfo.price.substring(1));
+
+        // if (item.isFree) {
+        //   discount += itemPrice * itemQuantity;
+        // }
       }
     }
-  
-    return totalAmount.toFixed(2);;
+
+    return {
+      totalAmount: totalAmount.toFixed(2),
+      discount: discount.toFixed(2),
+      total: (totalAmount - discount).toFixed(2),
+    };
   };
   
 
@@ -71,6 +114,9 @@ export const ShopContextProvider = (props) => {
     removeFromCart,
     getTotalCartAmount,
     checkout,
+    appliedOffers,
+    discount,
+    applyOffers,
   };
 
   return (
