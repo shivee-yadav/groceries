@@ -1,6 +1,5 @@
 import './App.css';
-import React, { useEffect, useState } from 'react';
-import { fetchProducts } from './components/API';
+import React, {  useState } from 'react';
 import {Route, Routes } from 'react-router-dom';
 import ProductList from './components/ProductList';
 import Cart from './components/Cart';
@@ -8,7 +7,8 @@ import Navbar from './components/Navbar';
 import Checkout from './components/Checkout';
 
 function App() {
-  const [category, setCategory] = useState('all');
+ 
+  
   const [cartItems, setCartItems] = useState([]);
  
   const addToCart = (product) => {
